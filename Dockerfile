@@ -11,7 +11,10 @@ COPY SimplicityStudio_v4/StudioLinux /tmp/StudioLinux/
 ENV DEBIAN_FRONTEND noninteractive
 RUN dpkg --add-architecture i386 \
 	&& apt-get update \
-	&& apt-get install -y gnome-themes-standard \
+	&& apt-get install -y \
+		gnome-themes-standard \
+		midori \
+		libgnomeui-0 \
 	&& mkdir -p /etc/udev/rules.d \
 	&& sed -i "s/sudo apt-get install/apt-get install -y/" "/tmp/setup.sh" \
 	&& /tmp/setup.sh \
@@ -21,11 +24,12 @@ RUN rm -rf /tmp/setup.sh /tmp/StudioLinux
 
 # Run as non-privileged user
 RUN useradd -ms /bin/bash user
-USER user
+#USER user
 WORKDIR /home/user
 
 # Use better GTK theme
 RUN echo "include \"/usr/share/themes/Adwaita/gtk-2.0/gtkrc\"" >> /home/user/.gtkrc-2.0
 
 # Autorun Simplicity Studio
-ENTRYPOINT ["/opt/SimplicityStudio_v4/run_studio.sh"]
+#ENTRYPOINT ["/opt/SimplicityStudio_v4/run_studio.sh"]
+ENTRYPOINT ["/bin/bash"]
